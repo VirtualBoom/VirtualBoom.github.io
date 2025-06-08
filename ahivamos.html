@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VirtualBoom - Gafas VR Futuristas</title>
+<link
+  href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+ rel="stylesheet"
+ />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #ffffff, #b3ecff);
+      color: #003366;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    body.dark-mode {
+      background: linear-gradient(to bottom, #1a1a1a, #333);
+      color: #e0e0e0;
+    }
+
+    header {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      box-shadow: 0 0 20px #00c6ff;
+      position: relative;
+    }
+
+    /* Nueva clase para la imagen añadida */
+    .header-logo {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #00c6ff;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+
+    .menu-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .side-menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #e6f7ff;
+      box-shadow: 5px 0 15px rgba(0, 198, 255, 0.5);
+      padding-top: 60px;
+      padding-bottom: 30px; /* espacio pequeño abajo */
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    .dark-mode .side-menu {
+      background-color: #222;
+    }
+
+    .side-menu a {
+      display: block;
+      padding: 15px 30px;
+      color: #007acc;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .side-menu a:hover {
+      background-color: #cceeff;
+      color: #005999;
+    }
+
+    .dark-mode .side-menu a {
+      color: #80d4ff;
+    }
+
+    .dark-mode .side-menu a:hover {
+      background-color: #333;
+      color: #00c6ff;
+    }
+
+    .side-menu button#darkModeBtn {
+      margin-top: 20px; /* separación pequeña */
+      padding: 15px 30px;
+      color: #007acc;
+      background: none;
+      border: none;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.3s;
+      border-top: 1px solid #00c6ff;
+    }
+
+    .side-menu button#darkModeBtn:hover {
+      background-color: #cceeff;
+      color: #005999;
+    }
+
+    .dark-mode .side-menu button#darkModeBtn {
+      color: #80d4ff;
+      border-top: 1px solid #004d80;
+    }
+
+    .dark-mode .side-menu button#darkModeBtn:hover {
+      background-color: #333;
+      color: #00c6ff;
+    }
+
+    .side-menu.active {
+      left: 0;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+    }
+
+    section {
+      display: none;
+      padding: 60px 30px;
+      min-height: 100vh;
+      background-color: #f0faff;
+    }
+
+    .dark-mode section {
+      background-color: #1f1f1f;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    h2 {
+      color: #007acc;
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px #00c6ff;
+    }
+
+    .dark-mode h2 {
+      color: #00c6ff;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+      box-shadow: 0 0 12px #00c6ff;
+    }
+
+    ul {
+      font-size: 1.1em;
+      line-height: 1.8em;
+      padding-left: 20px;
+      color: #003366;
+    }
+
+    .dark-mode ul {
+      color: #cccccc;
+    }
+
+    .contacto-info span {
+      display: block;
+      margin: 8px 0;
+      font-size: 1.1em;
+    }
+
+    footer {
+      background-color: #e6f7ff;
+      color: #007acc;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .dark-mode footer {
+      background-color: #111;
+      color: #00c6ff;
+    }
+
+    .btn-volver {
+      margin-top: 30px;
+      background-color: #00c6ff;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 1em;
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .btn-volver:hover {
+      background-color: #0099cc;
+      box-shadow: 0 0 25px #00c6ff;
+    }
+
+    .inicio {
+      padding: 50px 20px;
+      text-align: center;
+      background-color: #ffffff;
+    }
+
+    .dark-mode .inicio {
+      background-color: #2a2a2a;
+    }
+
+    .galeria {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .galeria img {
+      width: 300px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00c6ff;
+      transition: transform 0.3s;
+    }
+
+    .galeria img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00c6ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-icon" onclick="toggleMenu()">☰</div>
+
+  <div class="side-menu" id="sideMenu">
+    <a onclick="mostrarSeccion('🎮Salas')">🎮Salas</a>
+    <a onclick="mostrarSeccion('⚙️caracteristicas')">⚙️Características</a>
+    <a onclick="mostrarSeccion('📞redes')">📞Redes</a>
+    <a onclick="mostrarSeccion('💵Precios')">💵Precios</a>
+    <a onclick="mostrarSeccion('📍Acerca de VirtualBoom')">📍Acerca de VirtualBoom</a>
+    <button onclick="toggleDarkMode()" id="darkModeBtn">🌗Modo oscuro</button>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <header>
+    <h1>VirtualBoom</h1>
+    <p>Ven a VirtualBoom y explota de la felicidad</p>
+    <img 
+      src="https://imagizer.imageshack.com/v2/240x230q70/c/923/Reb8WN.jpg"
+      alt="Logo" 
+      class="header-logo"
+    />
+  </header>
+
+  <div id="inicio" class="inicio">
+    <h2>🎮 Algunos modelos de VirtualBoom:</h2>
+    <div class="galeria">
+      <img
+        src="https://img.freepik.com/vector-gratis/casco-realidad-virtual-realista_52683-51634.jpg?uid=R200518358&ga=GA1.1.1129289656.1747498295&semt=ais_hybrid&w=740"
+        alt="VR Headset 1"
+      />
+      <img
+        src="https://img.freepik.com/vector-gratis/ilustracion-aislada-innovacion-tecnologica_24911-114551.jpg?uid=R200518358&ga=GA1.1.1129289656.1747498295&semt=ais_hybrid&w=740"
+        alt="VR Headset 2"
+      />
+      <img
+        src="https://img.freepik.com/vector-gratis/tecnologia-vr-ilustracion-accesoria-aislada_24911-114548.jpg?uid=R200518358&ga=GA1.1.1129289656.1747498295&semt=ais_hybrid&w=740"
+        alt="VR Headset 3"
+      />
+    </div>
+  </div>
+
+  <section id="🎮Salas">
+    <h2>🎮 Salas de juegos</h2>
+    <p>Esta es una de nuestras tantas VrRooms en las que podrias disfrutar de una experiencia de juego inolvidable.</p>
+    <img
+      src="https://imagizer.imageshack.com/v2/1034x689q70/923/uxyzKJ.png"
+      alt="Gafas VR Futuristas"
+    />
+    <button class="btn-volver" onclick="ocultarSecciones()">Volver al Menú</button>
+  </section>
+
+  <section id="⚙️caracteristicas">
+    <h2>⚙️ Características de nuestras instalaciones</h2>
+    <ul>
+      <li>Resolución Ultra HD 4K por ojo</li>
+      <li>120° de visión inmersiva total</li>
+      <li>Sensores biométricos y de posición</li>
+      <li>Compatibles con PCs gaming, consolas y móviles</li>
+      <li>Audio 360º de alta fidelidad envolvente</li>
+      <li>Modos multijugador y realidad mixta</li>
+      <li>Te brindamos una experiencia inolvidable</li>
+      <li>Distintos modos de jugabilidad</li>
+      <li>El mejor lugar para divertirte jugando VR con tus amigos</li>
+      <img
+        src="https://img.freepik.com/fotos-premium/tipo-pelirrojo-gafas-realidad-virtual-controla-simulador-5d_1377152-1202.jpg?semt=ais_items_boosted&w=740"
+        alt="VR Headset 5"
+      />
+    </ul>
+    <button class="btn-volver" onclick="ocultarSecciones()">Volver al Menú</button>
+  </section>
+
+  <section id="📞redes">
+    <h2>📞 Redes</h2>
+    <p>Envíanos mensaje por Correo, WhatsApp o Instagram.:</p>
+    <div class="contacto-info">
+      <span>📱 +34 697 85 02 66</span>
+      <span>📱 @virtual_.boom</span>
+      <span>📧 VirtualBoom2@gmail.com</span>
+    </div>
+    <button class="btn-volver" onclick="ocultarSecciones()">Volver al Menú</button>
+  </section>
+
+  <section id="💵Precios">
+    <h2>💵 Tenemos variedades de precios super asequibles</h2>
+    <ul>
+      <li>Una hora de juego básico 19.99€</li>
+      <li>Una hora de juego premium 29.99€</li>
+      <li>Una hora de juego para grupos de 4 personas 59.99€</li>
+    </ul>
+    <button class="btn-volver" onclick="ocultarSecciones()">Volver al Menú</button>
+  </section>
+
+  <section id="📍Acerca de VirtualBoom">
+    <h2>📍 Acerca de VirtualBoom</h2>
+    <p><h1>¿Qué somos?</h1>
+      <li>En VirtualBoom, nos enfocamos en brindar la máxima comodidad a nuestros clientes, ofreciendo experiencias de juego inmersivas que jamás olvidarán. Nos especializamos en el alquiler por horas de gafas de realidad virtual (VR) de alta gama y en la venta de ordenadores gaming de alto rendimiento, diseñados para ofrecer una experiencia única, fluida y envolvente. Nuestra prioridad es que cada cliente disfrute de la tecnología más avanzada con el mejor servicio posible.</li>
+    </p>
+    <p><h1>¿Por qué elegirnos?</h1>
+      <li>Somos expertos en lo que hacemos y nos destacamos por ofrecer una excelente atención al cliente. En VirtualBoom, puedes venir con tres amigos (4 personas en total) y disfrutar juntos de una experiencia de realidad virtual por solo 59,99 €. Además, si pagas 20 € adicionales, recibirás una tarjeta válida para venir otro día con tu grupo al mismo precio exclusivo de la tarjeta. ¡Diversión garantizada hoy y asegurada para la próxima vez!</li>
+    </p>
+    <p><h1>¿Donde nos ubicamos?</h1>
+    <li>Nos ubicamos en el P.º de la Castellana al lado del estadio de fútbol Santiago Bernabéu.</li>
+    </p>
+    <button class="btn-volver" onclick="ocultarSecciones()">Volver al Menú</button>
+  </section>
+
+  <footer>
+    &copy; 2025 VirtualBoom hecho por: Jorge Alcazár, Christian Ruiz, Hamza el Aamari, Santiago Baez
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      const overlay = document.getElementById('overlay');
+      menu.classList.toggle('active');
+      overlay.style.display = menu.classList.contains('active') ? 'block' : 'none';
+    }
+
+    function mostrarSeccion(id) {
+      toggleMenu();
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById('inicio').style.display = 'none';
+      const seccion = document.getElementById(id);
+      if (seccion) {
+        seccion.classList.add('active');
+      }
+    }
+
+    function ocultarSecciones() {
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById('inicio').style.display = 'block';
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>
